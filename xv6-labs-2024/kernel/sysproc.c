@@ -6,6 +6,12 @@
 #include "spinlock.h"
 #include "proc.h"
 
+uint64 sys_trace(void){
+  int n;
+  argint(0, &n);
+  myproc()->trace_mask = n;
+  return 0;
+}
 uint64
 sys_exit(void)
 {

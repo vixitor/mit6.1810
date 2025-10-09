@@ -1,7 +1,7 @@
 
 # To compile and run with a lab solution, set the lab name in conf/lab.mk
 # (e.g., LAB=util).  Run make grade to test solution with the lab's
-# grade script (e.g., grade-lab-util).
+# grade script (e.g., grade-lab-syscall).
 
 -include conf/lab.mk
 
@@ -62,7 +62,7 @@ endif
 # riscv64-unknown-elf- or riscv64-linux-gnu-
 # perhaps in /opt/riscv/bin
 #TOOLPREFIX = 
-
+TOOLPREFIX=riscv64-elf-
 # Try to infer the correct TOOLPREFIX if not set
 ifndef TOOLPREFIX
 TOOLPREFIX := $(shell if riscv64-unknown-elf-objdump -i 2>&1 | grep 'elf64-big' >/dev/null 2>&1; \
@@ -194,16 +194,17 @@ UPROGS=\
 	$U/_grind\
 	$U/_wc\
 	$U/_zombie\
+	$U/_trace\
 
 
 
 
-ifeq ($(LAB),syscall)
-UPROGS += \
-	$U/_attack\
-	$U/_attacktest\
-	$U/_secret
-endif
+#ifeq ($(LAB),syscall)
+#UPROGS += \
+#	$U/_attack\
+#	$U/_attacktest\
+#	$U/_secret
+#endif
 
 ifeq ($(LAB),lock)
 UPROGS += \
