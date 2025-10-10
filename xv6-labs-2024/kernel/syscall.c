@@ -129,20 +129,22 @@ static uint64 (*syscalls[])(void) = {
 [SYS_close]   sys_close,
 [SYS_trace]   sys_trace,
 };
-
+static char* names[] = {"fork", "exit", "wait", "pipe", "read", "kill", "exec", "fstat", "chdir",
+                      "dup", "getpid", "sbrk", "sleep", "uptime", "open", "write", "mknod", "unlink", "link",
+                      "mkdir", "close", "trace"};
 void
 syscall(void)
 {
   int num;
   struct proc *p = myproc();
-
   num = p->trapframe->a7;
   if(num > 0 && num < NELEM(syscalls) && syscalls[num]) {
     // Use num to lookup the system call function for num, call it,
     // and store its return value in p->trapframe->a0
-    p->trapframe->a0 = syscalls[num]();
-    if(num == SYS_trace){
-        printf("SYS_trace\n");
+    int ret = syscalls[num]();
+    p->trapframe->a0 = ret;
+    if(p->trace_mask >> num & 1){
+        printf("%d: syscall %s -> %d\n", p->pid, names[num - 1], ret);
     }
   } else {
     printf("%d %s: unknown sys call %d\n",
